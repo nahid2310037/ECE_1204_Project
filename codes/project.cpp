@@ -53,7 +53,7 @@ public:
         for (int i = 0; i < 5; i++) {
             cout << i + 1 << ". " << str[i] << " - Fare: " << fair[i] + baseFair<< " BDT" << endl;
         }
-        cout << "Select a route (1-5): ";
+        cout << "Select (1-5): ";
         cin >> routeIndex;
         if (routeIndex < 1 || routeIndex > 5) {
             cout << "Invalid route selection." << endl;
@@ -140,33 +140,43 @@ public:
     }
 };
 
+string randStr(){
+    const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    string result;
+    for (int i = 0; i < 5; ++i) {
+        result += chars[rand() % chars.size()];
+    }
+    return result;
+}
+
 
 int main(){
     cout<<"Which type ticket do you want to buy?"<<endl;
     cout << "1. Bus Ticket" << endl;
     cout << "2. Train Ticket" << endl;
     cout << "3. Movie Ticket" << endl;
+    cout << "Enter your choice (1-3): "<<endl;
 
     int choice;
     cin >> choice;
     string ticketID;
     switch (choice) {
         case 1: {
-            ticketID = "BU" + to_string(rand() % 10000 + 1);
+            ticketID = "BU" + randStr();
             BusTicket busTicket(ticketID);
             busTicket.setTicketInfo();
             busTicket.displayTicketInfo();
             break;
         }
         case 2: {
-            ticketID = "TR" + to_string(rand() % 10000 + 1);
+            ticketID = "TR" + randStr();
             TrainTicket trainTicket(ticketID);
             trainTicket.setTicketInfo();
             trainTicket.displayTicketInfo();
             break;
         }
         case 3: {
-            ticketID = "MV" + to_string(rand() % 10000 + 1);
+            ticketID = "MV" + randStr();
             MovieTicket movieTicket(ticketID);
             movieTicket.setTicketInfo();
             movieTicket.displayTicketInfo();
