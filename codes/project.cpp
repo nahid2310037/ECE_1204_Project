@@ -141,7 +141,7 @@ public:
 };
 
 string randStr(){
-    const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     string result;
     for (int i = 0; i < 5; ++i) {
         result += chars[rand() % chars.size()];
@@ -185,6 +185,5 @@ int main(){
         default:
             cout << "Invalid choice." << endl;
     }
-
     return 0;
 }
