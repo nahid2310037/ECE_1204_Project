@@ -162,10 +162,11 @@ public:
 };
 
 // ===== Random Ticket ID =====
-string randStr(){
+string randStr() {
     const string chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     string result;
-    for(int i=0;i<5;i++) result+=chars[rand()%chars.size()];
+    for(int i=0; i<5; i++) 
+        result += chars[rand() % chars.size()];
     return result;
 }
 
@@ -289,41 +290,49 @@ double MovieTicket::calculateFair(){
 }
 
 
- 
 
-  void displayBuyerDetailsByTicketID(const string &searchTicketID) {
+
+void displayBuyerDetailsByTicketID(const string &searchTicketID) {
     ifstream fin("buyer_details.txt");
     if(!fin) { 
         cout << "No buyer details found.\n"; 
         return; 
     }
 
-    bool found = false;
     string line;
+    bool found = false;
+    const int boxWidth = 50;   // বক্সের ভেতরের প্রস্থ
 
     while(getline(fin,line)) {
         stringstream ss(line);
         string name, age, contact, ticketID, route, time, extra, total;
         getline(ss,name,',');
-        getline(ss,age,',');
-        getline(ss,contact,',');
-        getline(ss,ticketID,',');
-        getline(ss,route,',');
-        getline(ss,time,',');
-        getline(ss,extra,',');
-        getline(ss,total,',');
+         getline(ss,age,',');
+          getline(ss,contact,',');
+        getline(ss,ticketID,','); 
+        getline(ss,route,','); getline(ss,time,',');
+        getline(ss,extra,','); getline(ss,total,',');
 
         if(ticketID == searchTicketID) {
-            cout << "\n======= Buyer Details for TicketID: " << ticketID << " =======\n";
-            cout << "Name: " << name << "\n";
-            cout << "Age: " << age << "\n";
-            cout << "Contact: " << contact << "\n";
-            cout << "Route/Movie: " << route << "\n";
-            cout << "Time: " << time << "\n";
-            cout << "Extra Services Cost: " << extra << " BDT\n";
-            cout << "Total Fare: " << total << " BDT\n";
-            cout << "==============================================\n";
             found = true;
+
+            string top    = "+" + string(boxWidth, '-') + "+";
+            string bottom = "+" + string(boxWidth, '-') + "+";
+
+            cout << top << "\n";
+            cout << "|              BUYER DETAILS               |\n";
+            cout << top << "\n";
+
+            cout << "| Name        : " << setw(33) << left << name    << "|\n";
+            cout << "| Age         : " << setw(33) << left << age     << "|\n";
+            cout << "| Contact     : " << setw(33) << left << contact << "|\n";
+            cout << "| TicketID    : " << setw(33) << left << ticketID<< "|\n";
+            cout << "| Route/Movie : " << setw(33) << left << route   << "|\n";
+            cout << "| Time        : " << setw(33) << left << time    << "|\n";
+            cout << "| Extra Cost  : " << setw(33) << left << extra + " BDT" << "|\n";
+            cout << "| Total Fare  : " << setw(33) << left << total + " BDT" << "|\n";
+
+            cout << bottom << "\n";
             break;
         }
     }
@@ -334,8 +343,11 @@ double MovieTicket::calculateFair(){
 
 
 
+
+
 // ===== Main =====
 int main(){
+    srand(time(0)); 
     cout<<"Select ticket type:\n1. Bus Ticket\n2. Train Ticket\n3. Movie Ticket\nEnter choice (1-3): "; 
     int choice; cin>>choice;
     string ticketID;
