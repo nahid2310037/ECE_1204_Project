@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 #include <windows.h>
-#include <sapi.h>
 #include <string>
 #include <sstream>
 #include <locale>
@@ -103,7 +102,7 @@ public:
 template <typename T>
 T applyDiscount(T price, T percent) { return price - (price*percent/100); }
 
-// ===== TicketInspector with TTS & TXT Logging =====
+// ===== TicketInspector =====
 class TicketInspector {
 public:
     void verifyTicket(const Ticket &t) {
@@ -129,17 +128,6 @@ public:
         cout << "Extra Services Cost: " << t.extraServices.calculateExtraCost() << " BDT\n";
         cout << "Total Fare: " << t.finalFare << " BDT\n";
         cout << "==================================\n";
-
-        // Text-to-Speech
-        ISpVoice *pVoice = nullptr;
-        if(SUCCEEDED(::CoInitialize(nullptr))) {
-            if(SUCCEEDED(CoCreateInstance(CLSID_SpVoice,nullptr,CLSCTX_ALL,IID_ISpVoice,(void**)&pVoice))){
-                wstring wtext = L"Congratulations, " + wstring(t.buyer.name.begin(), t.buyer.name.end()) + L"! Your ticket is confirmed.";
-                pVoice->Speak(wtext.c_str(), SPF_DEFAULT, nullptr);
-                pVoice->Release();
-            }
-            ::CoUninitialize();
-        }
     }
 };
 
@@ -299,6 +287,7 @@ double MovieTicket::calculateFair(){
     selectedRoute = movies[ind];
     return fair[ind]+baseFair;
 }
+
 void displayBuyerDetails() {
     ifstream fin("buyer_details.txt");
     if(!fin) { cout << "No buyer details found.\n"; return; }
