@@ -288,22 +288,19 @@ double MovieTicket::calculateFair(){
     return fair[ind]+baseFair;
 }
 
-void displayBuyerDetails() {
+
+ 
+
+  void displayBuyerDetailsByTicketID(const string &searchTicketID) {
     ifstream fin("buyer_details.txt");
-    if(!fin) { cout << "No buyer details found.\n"; return; }
+    if(!fin) { 
+        cout << "No buyer details found.\n"; 
+        return; 
+    }
 
-    cout << left << setw(15) << "Name"
-         << setw(5) << "Age"
-         << setw(15) << "Contact"
-         << setw(10) << "TicketID"
-         << setw(20) << "Route/Movie"
-         << setw(10) << "Time"
-         << setw(10) << "ExtraCost"
-         << setw(10) << "TotalFare" << endl;
-
-    cout << string(95,'-') << endl;
-
+    bool found = false;
     string line;
+
     while(getline(fin,line)) {
         stringstream ss(line);
         string name, age, contact, ticketID, route, time, extra, total;
@@ -315,17 +312,27 @@ void displayBuyerDetails() {
         getline(ss,time,',');
         getline(ss,extra,',');
         getline(ss,total,',');
-        cout << left << setw(15) << name
-             << setw(5) << age
-             << setw(15) << contact
-             << setw(10) << ticketID
-             << setw(20) << route
-             << setw(10) << time
-             << setw(10) << extra
-             << setw(10) << total << endl;
+
+        if(ticketID == searchTicketID) {
+            cout << "\n======= Buyer Details for TicketID: " << ticketID << " =======\n";
+            cout << "Name: " << name << "\n";
+            cout << "Age: " << age << "\n";
+            cout << "Contact: " << contact << "\n";
+            cout << "Route/Movie: " << route << "\n";
+            cout << "Time: " << time << "\n";
+            cout << "Extra Services Cost: " << extra << " BDT\n";
+            cout << "Total Fare: " << total << " BDT\n";
+            cout << "==============================================\n";
+            found = true;
+            break;
+        }
     }
+
+    if(!found) cout << "No details found for TicketID: " << searchTicketID << endl;
     fin.close();
 }
+
+
 
 // ===== Main =====
 int main(){
@@ -360,7 +367,14 @@ int main(){
         }
         default: cout<<"Invalid choice.\n"; break;
     }
-    cout << "\nDo you want to view all buyer details? 1.Yes 0.No: "; int view; cin >> view;
-    if(view==1) displayBuyerDetails();
+   cout << "\nDo you want to view buyer details by TicketID? 1.Yes 0.No: "; 
+   int view; cin >> view;
+    if(view==1) {
+    string searchID;
+    cout << "Enter TicketID: "; 
+    cin >> searchID;
+    displayBuyerDetailsByTicketID(searchID);
+}
+
     return 0;
 }
