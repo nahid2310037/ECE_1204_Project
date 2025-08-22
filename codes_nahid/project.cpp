@@ -1,238 +1,220 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class Buyer {
+static int totalTicketsSold = 0;
+string generateTicketID();
+
+template <typename T>
+T roundUp(T num, T multiple = 10) {
+    return ceil(num / multiple) * multiple; // use ceil for float-safe rounding
+}
+
+
+class Passenger{
+private:
     string name;
     int age;
     string contact;
 public:
-    Buyer();
-    void displayInfo();
-    void setInfo();
-    int getAge();
+    Passenger(){
+        name = "";
+        age = 0;
+        contact = "";
+    };
+    int getAge(){
+        return age;
+    }
+    void setInfo(){
+        cout << "Enter passenger name: ";
+        cin.ignore();
+        getline(cin, name);
+        cout << "Enter passenger age: ";
+        cin >> age;
+        cout << "Enter passenger contact: ";
+        cin >> contact;
+    };
+    void displayInfo(){
+        cout << "Passenger Name: " << name << endl;
+        cout << "Passenger Age: " << age << endl;
+        cout << "Passenger Contact: " << contact << endl;
+    };
 };
 
 class Ticket {
 protected:
-    string ticketID, selectedRoute, departureTime;
-    double baseFair, finalFare;
-    Buyer buyer;
+    int ticketType; // 1: Bus, 2: Train, 3: Flight
+    int isPremium;  // 1: Premium, 0: Regular
+    string ticketID;    
+    string selectedRoute;
+    int selectedDistance;
+    string departureTime;
+    string routes[6] = {"Rajshahi - Dhaka", "Rajshahi - Khulna" , "Rajshahi - Rangpur", "Rajshahi - Kushtia", "Rajshahi - Barisal", "Rajshahi - Bogura"};
+    int distance[6] = {280,250,200,90,300,150};
+    int fare;
 public:
-    Ticket(string _ticketID);
-    virtual double calculateFair() = 0;
-    int returnFair(string str[], int fair[], int len);
-    virtual void setTime();
-    virtual void displayTicketInfo();
-    void setTicketInfo();
+    Ticket(int type, int premium) {
+        ticketType = type;
+        isPremium = premium;
+    }
+
+    void applyDiscount(double percentage) {
+        fare -= (fare * percentage / 100);
+    }
+    void applyDiscount(int amount) {
+        fare -= amount;
+    }
+    void checkDiscount(string coupon) {
+        if(coupon == "ECE"){
+            cout<< "You have got 11.1\% discount!" << endl;
+            applyDiscount((double)11.1);
+        } else if (coupon == "first"){
+            cout << "First customer get flat 50 taka discount!" << endl;
+            applyDiscount(50);
+        } else {
+            cout << "Invalid coupon code." << endl;
+        }
+    }
+    virtual int calculateFare() = 0;
+    virtual string setTime() = 0;
+
+    void selectRoute() {
+        int len;
+        if (ticketType == 1) {
+            ticketID = "BU" + generateTicketID();
+            len = 6;
+        } else if (ticketType == 2) {
+            ticketID = "TR" + generateTicketID();
+            len = 4;
+        } else if (ticketType == 3) {
+            ticketID = "FL" + generateTicketID();
+            len = 1;
+        } else {
+            cout << "Invalid ticket type." << endl;
+            return;
+        }
+        cout << "Select a route:" << endl;
+        for (int i = 0; i < len; i++) {
+            cout << i + 1 << ". " << routes[i] << endl;
+        }
+
+        int routeChoice;
+        cout << "Enter your choice (1-" << len << "): ";
+        cin >> routeChoice;
+        if (routeChoice >= 1 && routeChoice <= len) {
+            selectedRoute = routes[routeChoice - 1];
+            selectedDistance = distance[routeChoice - 1];
+        } else {
+            cout << "Invalid route selection." << endl;
+        }
+        departureTime = setTime();
+    }
+    void showTicketInfo(){
+        cout << "=========================================================" << endl;  
+        cout << "Ticket ID: " << ticketID << endl;
+        cout << "Selected Route: " << selectedRoute << endl;
+        cout << "Ticket Type: " << (ticketType == 1 ? "Bus" : ticketType == 2 ? "Train" : "Flight") << endl;
+        cout << "Departure Time: " << departureTime << endl;
+        cout << "Is Premium: " << (isPremium ? "Yes" : "No") << endl;
+        float addPremiumFare = 1;
+        if (isPremium) addPremiumFare = 1.5; 
+        fare = calculateFare() * addPremiumFare;
+        cout << "Fare: " << roundUp(fare) << endl;
+        cout<<"Do you have any Coupon Code? (1. Yes / 0. No): ";
+        int hasCoupon;
+        cin >> hasCoupon;
+        if (hasCoupon == 1) {
+            string couponCode;
+            cout << "Enter coupon code: ";
+            cin >> couponCode;
+            checkDiscount(couponCode);
+        }
+        if(totalTicketsSold == 0){
+            checkDiscount("first");
+        }
+        cout << "Final Fare: " << roundUp(fare) << endl;
+        cout << "=========================================================" << endl;  
+        totalTicketsSold++;
+    }
 };
 
-class BusTicket : public Ticket {
-    string routes[5] = {"Rajshahi-Dhaka","Rajshahi-Kushtia","Rajshahi-Barishal","Rajshahi-Rangpur","Rajshahi-Natore"};
-    int fair[5] = {500, 90, 450, 200, 40};
+class BusTicket: public Ticket {
 public:
-    BusTicket(string _ticketID);
-    double calculateFair() override;
+    BusTicket(int premium) : Ticket(1, premium) {}
+    int calculateFare(){
+        return selectedDistance * 3;
+    }
+    string setTime(){
+        cout<<"Select your departure time : "<<endl;
+        cout<<"1. 08:00 AM"<<endl;
+        cout<<"2. 09:00 AM"<<endl;
+        cout<<"3. 12:00 PM"<<endl;
+        cout<<"4. 03:00 PM"<<endl;
+        cout<<"5. 04:00 PM"<<endl;
+        cout<<"6. 07:00 PM"<<endl;
+        cout<<"Enter your choice: ";
+        int timeChoice;
+        cin>>timeChoice;
+        switch(timeChoice){
+            case 1: return "08:00 AM";
+            case 2: return "09:00 AM";
+            case 3: return "12:00 PM";
+            case 4: return "03:00 PM";
+            case 5: return "04:00 PM";
+            case 6: return "07:00 PM";
+            default: return "Invalid Time";
+        }
+    }
+
 };
 
-class TrainTicket : public Ticket {
-    string routes[5] = {"Rajshahi-Dhaka","Rajshahi-Kushtia","Rajshahi-Bogura","Rajshahi-Rangpur","Rajshahi-Natore"};
-    int fair[5] = {500, 90, 370, 200, 40};
+class TrainTicket: public Ticket {
 public:
-    TrainTicket(string _ticketID);
-    double calculateFair() override;
-    void setTime() override;
+    TrainTicket(int premium) : Ticket(2, premium) {}
+    int calculateFare(){
+        return selectedDistance * 2;
+    }
+    string setTime(){
+        cout<<"Select your departure time : "<<endl;
+        cout<<"1. 08:00 AM"<<endl;
+        cout<<"2. 12:00 PM"<<endl;
+        cout<<"3. 04:00 PM"<<endl;
+        cout<<"Enter your choice: ";
+        int timeChoice;
+        cin>>timeChoice;
+        switch(timeChoice){
+            case 1: return "08:00 AM";
+            case 2: return "12:00 PM";
+            case 3: return "04:00 PM";
+            default: return "Invalid Time";
+        }
+    }
 };
 
-class MovieTicket : public Ticket {
-    string movies[5] = {"Movie A","Movie B","Movie C","Movie D","Movie E"};
-    int fair[5] = {100, 70, 90, 250, 150};
+class FlightTicket: public Ticket {
 public:
-    MovieTicket(string _ticketID);
-    void setTime() override;
-    void displayTicketInfo() override;
-    double calculateFair() override;
+    FlightTicket(int premium) : Ticket(3, premium) {}
+    int calculateFare(){
+        return 5500;
+    }
+    string setTime(){
+        cout<<"Select your departure time : "<<endl;
+        cout<<"1. 10:00 AM"<<endl;
+        cout<<"2. 08:00 PM"<<endl;
+        cout<<"Enter your choice: ";
+        int timeChoice;
+        cin>>timeChoice;
+        switch(timeChoice){
+            case 1: return "10:00 AM";
+            case 2: return "08:00 PM";
+            default: return "Invalid Time";
+        }
+    }
 };
 
-string randStr();
 
 
-// Buyer definitions
-Buyer::Buyer() {
-    name = "";
-    age = 0;
-    contact = "";
-}
 
-void Buyer::displayInfo() {
-    cout << "Name: " << name << endl;
-    cout << "Age: " << age << endl;
-    cout << "Contact: " << contact << endl;
-}
-
-void Buyer::setInfo() {
-    cout << "We need some information to complate." << endl;
-    cout << "Enter name: ";
-    getchar();
-    getline(cin, name);
-    cout << "Enter age: ";
-    cin >> age;
-    cout << "Enter contact: ";
-    cin >> contact;
-}
-
-int Buyer::getAge() {
-    return age;
-}
-
-
-// Ticket definitions
-Ticket::Ticket(string _ticketID) {
-    ticketID = _ticketID;
-}
-
-int Ticket::returnFair(string str[], int fair[], int len) {
-    int routeIndex;
-    for (int i = 0; i < 5; i++) {
-        cout << i + 1 << ". " << str[i] << " - Fare: " << fair[i] + baseFair << " BDT" << endl;
-    }
-    cout<<"---------------------------------------------------------"<<endl;
-    cout << "Press 0 to Exit if do not want to buy." << endl;
-    cout << "Select a route (1-5): "<<endl;
-    cin >> routeIndex;
-    if (routeIndex == 0) {
-        cout << "Exiting..." << endl;
-        exit(0);
-    }
-    if (routeIndex < 1 || routeIndex > 5) {
-        cout << "Invalid route selection." << endl;
-        return 0;
-    }
-    return routeIndex - 1;
-}
-
-void Ticket::setTime() {
-    cout << "Select departure time: "<<endl;
-    cout<<"1. 8:15 AM"<<endl;
-    cout<<"2. 10:15 AM"<<endl;
-    cout<<"3. 12:15 PM"<<endl;
-    cout<<"4. 2:15 PM"<<endl;
-    cout<<"5. 4:15 PM"<<endl;
-    cout << "Enter your choice (1-5): ";
-    int choice;
-    cin >> choice;
-    switch (choice) {
-        case 1: departureTime = "8:15 AM"; break;
-        case 2: departureTime = "10:15 AM"; break;
-        case 3: departureTime = "12:15 PM"; break;
-        case 4: departureTime = "2:15 PM"; break;
-        case 5: departureTime = "4:15 PM"; break;
-        default: cout << "Invalid choice." << endl; break;
-    }
-}
-
-void Ticket::setTicketInfo() {
-    finalFare = calculateFair();
-    setTime();
-    buyer.setInfo();
-}
-
-void Ticket::displayTicketInfo() {
-    cout << "=========================================================" << endl;
-    cout << "Ticket purchase complete" << endl;
-    cout << "=========================================================" << endl;
-    buyer.displayInfo();
-    cout << "Ticket ID: " << ticketID << endl;
-    cout << "Selected Route: " << selectedRoute << endl;
-    cout << "Departure Time: " << departureTime << endl;
-    cout << "Final Fare: " << finalFare << " BDT" << endl;
-}
-
-
-// BusTicket definitions
-BusTicket::BusTicket(string _ticketID) : Ticket(_ticketID) {
-    baseFair = 250;
-}
-
-double BusTicket::calculateFair() {
-    cout << "Available Routes : " << endl;
-    int ind = returnFair(routes, fair, 5);
-    selectedRoute = routes[ind];
-    return fair[ind] + baseFair;
-}
-
-
-// TrainTicket definitions
-TrainTicket::TrainTicket(string _ticketID) : Ticket(_ticketID) {
-    baseFair = 60;
-}
-
-double TrainTicket::calculateFair() {
-    cout << "Available Routes : " << endl;
-    int ind = returnFair(routes, fair, 5);
-    selectedRoute = routes[ind];
-    return fair[ind] + baseFair;
-}
-void TrainTicket::setTime() {
-    cout << "Select departure time: "<<endl;
-    cout<<"1. 8:00 AM"<<endl;
-    cout<<"2. 12:00 PM"<<endl;
-    cout<<"3. 4:00 PM"<<endl;
-    cout << "Enter your choice (1-3): ";
-    int choice;
-    cin >> choice;
-    switch (choice) {
-        case 1: departureTime = "8:00 AM"; break;
-        case 2: departureTime = "12:00 PM"; break;
-        case 3: departureTime = "4:00 PM"; break;
-        default: cout << "Invalid choice." << endl; break;
-    }
-}
-
-// MovieTicket definitions
-MovieTicket::MovieTicket(string _ticketID) : Ticket(_ticketID) {
-    baseFair = 100;
-}
-
-void MovieTicket::setTime() {
-    cout << "Select show time: "<<endl;
-    cout<<"1. 9:00 AM"<<endl;
-    cout<<"2. 12:00 PM"<<endl;
-    cout<<"3. 3:00 PM"<<endl;
-    cout<<"4. 6:00 PM"<<endl;
-    cout<<"5. 9:00 PM"<<endl;
-    cout << "Enter your choice (1-5): ";
-    int choice;
-    cin >> choice;
-    switch (choice) {
-        case 1: departureTime = "9:00 AM"; break;
-        case 2: departureTime = "12:00 PM"; break;
-        case 3: departureTime = "3:00 PM"; break;
-        case 4: departureTime = "6:00 PM"; break;
-        case 5: departureTime = "9:00 PM"; break;
-        default: cout << "Invalid choice." << endl; break;
-    }
-}
-void MovieTicket::displayTicketInfo() {
-    cout << "=========================================================" << endl;
-    cout << "Ticket purchase complete" << endl;
-    cout << "=========================================================" << endl;
-    buyer.displayInfo();
-    cout << "Ticket ID: " << ticketID << endl;
-    cout << "Selected Movie: " << selectedRoute << endl;
-    cout << "Show Time: " << departureTime << endl;
-    cout << "Final Fare: " << finalFare << " BDT" << endl;
-}
-
-double MovieTicket::calculateFair() {
-    cout << "Available Movies : " << endl;
-    int ind = returnFair(movies, fair, 5);
-    selectedRoute = movies[ind];
-    return fair[ind] + baseFair;
-}
-
-
-// Utility function
-string randStr() {
+string generateTicketID() {
     const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     string result;
     for (int i = 0; i < 5; ++i) {
@@ -241,42 +223,68 @@ string randStr() {
     return result;
 }
 
-
-// Main
-int main() {
-    cout << "Which type ticket do you want to buy?" << endl;
-    cout << "1. Bus Ticket" << endl;
-    cout << "2. Train Ticket" << endl;
-    cout << "3. Movie Ticket" << endl;
-    cout << "Enter your choice (1-3): " << endl;
-
-    int choice;
-    cin >> choice;
-    string ticketID;
-    switch (choice) {
-        case 1: {
-            ticketID = "BU" + randStr();
-            BusTicket busTicket(ticketID);
-            busTicket.setTicketInfo();
-            busTicket.displayTicketInfo();
-            break;
-        }
-        case 2: {
-            ticketID = "TR" + randStr();
-            TrainTicket trainTicket(ticketID);
-            trainTicket.setTicketInfo();
-            trainTicket.displayTicketInfo();
-            break;
-        }
-        case 3: {
-            ticketID = "MV" + randStr();
-            MovieTicket movieTicket(ticketID);
-            movieTicket.setTicketInfo();
-            movieTicket.displayTicketInfo();
-            break;
-        }
-        default:
-            cout << "Invalid choice." << endl;
+int isPremium(int ticketChoice){
+    cout<<"Do you want a Premium ticket? (1: Yes, 0: No): ";
+    int premiumChoice;
+    cin>>premiumChoice;
+    if(premiumChoice == 1){
+        return 1; // Premium ticket selected
     }
+    return 0; // Regular ticket selected   
+}
+
+void buyTicket(){
+    Ticket *ticket = nullptr;
+    cout<<"Which type of ticket you want to buy?"<<endl;
+    cout<<"1. Bus Ticket"<<endl;
+    cout<<"2. Train Ticket"<<endl;
+    cout<<"3. Flight Ticket"<<endl;
+    cout<<"Enter your choice: ";
+    int ticketChoice;
+    cin>>ticketChoice;
+    switch(ticketChoice){
+        case 1:
+            cout<<"You have selected Bus Ticket."<<endl;
+            ticket = new BusTicket(isPremium(ticketChoice));
+            ticket->selectRoute();
+            break;
+        case 2:
+            cout<<"You have selected Train Ticket."<<endl;
+            ticket = new TrainTicket(isPremium(ticketChoice));
+            ticket->selectRoute();
+            break;
+        case 3:
+            cout<<"You have selected Flight Ticket."<<endl;
+            ticket = new FlightTicket(isPremium(ticketChoice));
+            ticket->selectRoute();
+            break;
+        default:
+            cout<<"Invalid choice."<<endl;
+            break;
+    }
+    Passenger passenger;
+    passenger.setInfo();
+    cout<<"=================== Ticket Information ==================="<<endl;
+    passenger.displayInfo();
+    ticket->showTicketInfo();
+}
+
+int main(){
+    while(1){
+        cout<<"1. Buy Ticket"<<endl;
+        cout<<"2. Check Ticket"<<endl;
+        cout<<"To exit enter 0"<<endl;
+        cout<<"Enter your choice: ";
+        int choice;
+        cin>>choice;
+        if(choice == 1) {
+            buyTicket();
+        } else if(choice == 2) {
+            // Check Ticket functionality
+        } else {
+            break;
+        }
+    }
+
     return 0;
 }
