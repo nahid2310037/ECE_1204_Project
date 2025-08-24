@@ -444,7 +444,14 @@ protected:
     double amount; // Payment amount
 public:
     Payment(double amt = 0.0) : amount(amt) {} // Constructor
-    virtual void processPayment() = 0; // Pure virtual function
+    void processPayment(){
+        cout << " Processing Payment of " << amount << " BDT..." << endl;
+        cout<< " Transaction id: " << getTransactionID() << endl;
+
+    } 
+    string getTransactionID() const {
+        return "TXN" + to_string(rand() % 10000); // Generates a random transaction ID
+    }
     virtual ~Payment() {} // Virtual destructor
 };
 
@@ -452,8 +459,9 @@ public:
 class Bkash : virtual public Payment {
 public:
     Bkash(double amt = 0.0) : Payment(amt) {} // Constructor
-    void processPayment() override {
-        cout << " Processing Bkash Payment of " << amount << " BDT..." << endl; // Processes Bkash payment
+    void startTransaction() {
+        cout << " Starting Bkash Transaction..." << endl;
+        cout << " Bkash Transaction Completed!" << endl;
     }
 };
 
@@ -461,8 +469,9 @@ public:
 class Nagad : virtual public Payment {
 public:
     Nagad(double amt = 0.0) : Payment(amt) {} // Constructor
-    void processPayment() override {
-        cout << " Processing Nagad Payment of " << amount << " BDT..." << endl; // Processes Nagad payment
+    void startTransaction() {
+        cout << " Starting Nagad Transaction..." << endl;
+        cout << " Nagad Transaction Completed!" << endl;
     }
 };
 
@@ -470,8 +479,9 @@ public:
 class Bank : virtual public Payment {
 public:
     Bank(double amt = 0.0) : Payment(amt) {} // Constructor
-    void processPayment() override {
-        cout << " Processing Bank Payment of " << amount << " BDT..." << endl; // Processes Bank payment
+    void startTransaction() {
+        cout << " Starting Bank Transaction..." << endl;
+        cout << " Bank Transaction Completed!" << endl;
     }
 };
 
@@ -494,16 +504,13 @@ public:
 
         cout << "\n---------------------------------------" << endl;
         switch (choice) {
-            case 1: Bkash::processPayment(); break; // Processes Bkash payment
-            case 2: Nagad::processPayment(); break; // Processes Nagad payment
-            case 3: Bank::processPayment(); break; // Processes Bank payment
+            case 1: Bkash::processPayment(); Bkash::startTransaction(); // Processes Bkash payment
+            case 2: Nagad::processPayment(); Nagad::startTransaction(); break; // Processes Nagad payment
+            case 3: Bank::processPayment(); Bank::startTransaction(); break; // Processes Bank payment
             default: cout << " Invalid choice!" << endl; return; // Handles invalid choice
         }
         cout << " Payment Completed Successfully!" << endl;
         cout << "=======================================\n" << endl;
-    }
-    void processPayment() override {
-        Bkash::processPayment(); // Default to Bkash payment
     }
 };
 
