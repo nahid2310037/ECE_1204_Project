@@ -43,9 +43,16 @@ protected:
     string selectedRoute; // Selected travel route
     int selectedDistance; // Distance of selected route
     string departureTime; // Departure time
-    string routes[6] = {"Rajshahi - Dhaka", "Rajshahi - Khulna", "Rajshahi - Rangpur",
-                        "Rajshahi - Kushtia", "Rajshahi - Barisal", "Rajshahi - Bogura"}; // Available routes
-    int distance[6] = {280, 250, 200, 90, 300, 150}; // Distances for routes
+    string routes[7] = {
+        "Rajshahi - Dhaka", 
+        "Rajshahi - Khulna", 
+        "Rajshahi - Rangpur",
+        "Rajshahi - Kushtia", 
+        "Rajshahi - Barisal", 
+        "Rajshahi - Bogura",
+        "Rajshahi - Nator"
+    }; // Available routes
+    int distance[7] = {280, 250, 200, 90, 300, 150, 55}; // Distances for routes
     int fare; // Ticket fare
 
 public:
@@ -172,7 +179,7 @@ void Ticket::selectRoute() {
     int len;
     if (ticketType == 1) {
         ticketID = "BU" + generateTicketID(); // Generates bus ticket ID
-        len = 6; // Sets number of routes for bus
+        len = 7; // Sets number of routes for bus
     } else if (ticketType == 2) {
         ticketID = "TR" + generateTicketID(); // Generates train ticket ID
         len = 4; // Sets number of routes for train
@@ -460,7 +467,7 @@ public:
 class Bkash : virtual public Payment {
 public:
     Bkash(double amt = 0.0) : Payment(amt) {} // Constructor
-    void startTransaction() {
+    void BkashTransaction() {
         cout << " Starting Bkash Transaction..." << endl;
         cout <<" Enter Bkash pin: ";
         cin>>pin;
@@ -472,7 +479,7 @@ public:
 class Nagad : virtual public Payment {
 public:
     Nagad(double amt = 0.0) : Payment(amt) {} // Constructor
-    void startTransaction() {
+    void NagadTransaction() {
         cout << " Starting Nagad Transaction..." << endl;
         cout << " Enter Nagad pin: ";
         cin>>pin;
@@ -484,7 +491,7 @@ public:
 class Bank : virtual public Payment {
 public:
     Bank(double amt = 0.0) : Payment(amt) {} // Constructor
-    void startTransaction() {
+    void BankTransaction() {
         cout << " Starting Bank Transaction..." << endl;
         cout << " Enter account number: ";
         cin >> pin;
@@ -512,9 +519,9 @@ public:
         cout << "\n---------------------------------------" << endl;
         PassengerPayment::processPayment(); //Daimond Problem Issue and Solve
         switch (choice) {
-            case 1: Bkash::startTransaction(); // Processes Bkash payment
-            case 2: Nagad::startTransaction(); break; // Processes Nagad payment
-            case 3: Bank::startTransaction(); break; // Processes Bank payment
+            case 1: PassengerPayment::BkashTransaction(); break;// Processes Bkash payment
+            case 2: PassengerPayment::NagadTransaction(); break; // Processes Nagad payment
+            case 3: PassengerPayment::BankTransaction(); break; // Processes Bank payment
             default: cout << " Invalid choice!" << endl; return; // Handles invalid choice
         }
         cout << " Payment Completed Successfully!" << endl;
