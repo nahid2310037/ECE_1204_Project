@@ -442,6 +442,7 @@ void displayBuyerDetailsByTicketID(const string &searchTicketID) {
 class Payment {
 protected:
     double amount; // Payment amount
+    string pin;
 public:
     Payment(double amt = 0.0) : amount(amt) {} // Constructor
     void processPayment(){
@@ -461,6 +462,8 @@ public:
     Bkash(double amt = 0.0) : Payment(amt) {} // Constructor
     void startTransaction() {
         cout << " Starting Bkash Transaction..." << endl;
+        cout <<" Enter Bkash pin: ";
+        cin>>pin;
         cout << " Bkash Transaction Completed!" << endl;
     }
 };
@@ -471,6 +474,8 @@ public:
     Nagad(double amt = 0.0) : Payment(amt) {} // Constructor
     void startTransaction() {
         cout << " Starting Nagad Transaction..." << endl;
+        cout << " Enter Nagad pin: ";
+        cin>>pin;
         cout << " Nagad Transaction Completed!" << endl;
     }
 };
@@ -481,6 +486,8 @@ public:
     Bank(double amt = 0.0) : Payment(amt) {} // Constructor
     void startTransaction() {
         cout << " Starting Bank Transaction..." << endl;
+        cout << " Enter account number: ";
+        cin >> pin;
         cout << " Bank Transaction Completed!" << endl;
     }
 };
@@ -503,10 +510,11 @@ public:
         cin >> choice; // Gets payment method choice
 
         cout << "\n---------------------------------------" << endl;
+        PassengerPayment::processPayment(); //Daimond Problem Issue and Solve
         switch (choice) {
-            case 1: Bkash::processPayment(); Bkash::startTransaction(); // Processes Bkash payment
-            case 2: Nagad::processPayment(); Nagad::startTransaction(); break; // Processes Nagad payment
-            case 3: Bank::processPayment(); Bank::startTransaction(); break; // Processes Bank payment
+            case 1: Bkash::startTransaction(); // Processes Bkash payment
+            case 2: Nagad::startTransaction(); break; // Processes Nagad payment
+            case 3: Bank::startTransaction(); break; // Processes Bank payment
             default: cout << " Invalid choice!" << endl; return; // Handles invalid choice
         }
         cout << " Payment Completed Successfully!" << endl;
