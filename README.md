@@ -723,7 +723,7 @@ int main() {
 ```
 
 <h2>3. Program Functionality</h2>
-<p>The <strong>Ticket Reservation System</strong> is a console-based C++ application designed to streamline ticket reservations for various travel modes. Its key functionalities include:</p>
+<p>The <strong>Ticket Booking System</strong> is a console-based C++ application designed to streamline ticket reservations for various travel modes. Its key functionalities include:</p>
 <ul>
     <li>Allowing users to select ticket types (bus, train, or flight), routes, and premium or regular options.</li>
     <li>Calculating fares based on distance (bus/train) or fixed rates (flight), with discounts via coupon codes or first-customer offers.</li>
