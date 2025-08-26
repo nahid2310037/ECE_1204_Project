@@ -44,11 +44,11 @@ protected:
     int selectedDistance; // Distance of selected route
     string departureTime; // Departure time
     string routes[7] = {
-        "Rajshahi - Dhaka", 
-        "Rajshahi - Khulna", 
+        "Rajshahi - Dhaka",
+        "Rajshahi - Khulna",
         "Rajshahi - Rangpur",
-        "Rajshahi - Kushtia", 
-        "Rajshahi - Barisal", 
+        "Rajshahi - Kushtia",
+        "Rajshahi - Barisal",
         "Rajshahi - Bogura",
         "Rajshahi - Nator"
     }; // Available routes
@@ -117,28 +117,66 @@ int Passenger::getAge() {
 }
 
 void Passenger::setInfo() {
-    try {
-        cout << "Enter passenger name: ";
-        cin.ignore(); // Clears input buffer
-        getline(cin, name); // Gets full name
+    while(true)
+    {
+         try {
 
+            cout << "Enter passenger name: ";
+            cin.ignore(); // Clears input buffer
+            getline(cin, name); // Gets full name
+                if(cin.fail())
+                {
+                    cin.clear();
+                    throw "invalid name!Enter correct one.";
+                }
+            break;
+         }
+
+         catch (const char *e) {
+        cout << "Error: " << e << endl;
+
+      }
+    }
+
+while (true)
+{
+    try{
         cout << "Enter passenger age: ";
         cin >> age; // Gets age
         if (age <= 0 || age > 120) {
+            cin.clear();
             throw "Invalid age. Must be between 1 and 120."; // Validates age
         }
+        break;
+    }
+     catch (const char *e) {
+        cout << "Error: " << e << endl;
+        cout << "Please re-enter passenger details correctly.\n";
 
+    }
+
+}
+
+while (true)
+{
+    try{
         cout << "Enter passenger contact: ";
         cin >> contact; // Gets contact number
         if (contact.size() != 11 || contact.substr(0, 2) != "01") {
             throw "Invalid mobile number. Must start with 01 and be 11 digits."; // Validates contact
         }
+        break;
     }
     catch (const char *e) {
         cout << "Error: " << e << endl;
         cout << "Please re-enter passenger details correctly.\n";
-        setInfo(); // Recursively prompts for valid input
     }
+
+
+}
+
+
+
 }
 
 void Passenger::displayInfo() {
@@ -197,22 +235,27 @@ void Ticket::selectRoute() {
     }
 
     int routeChoice;
-    cout << "Enter your choice (1-" << len << "): ";
-    cin >> routeChoice; // Gets route choice
+    while(true)
+    {
+        cout << "Enter your choice (1-" << len << "): ";
+        cin >> routeChoice; // Gets route choice
 
     try {
         if (routeChoice < 1 || routeChoice > len) {
-            throw "Invalid route selection."; // Validates route choice
+            cin.clear();
+            throw "Invalid route selection !Select correct one."; // Validates route choice
         }
         selectedRoute = routes[routeChoice - 1]; // Sets selected route
         selectedDistance = distance[routeChoice - 1]; // Sets route distance
+        break;
     }
     catch (const char* e) {
         cout << "Error: " << e << endl;
-        cout << "Defaulting to route 1.\n";
-        selectedRoute = routes[0]; // Defaults to first route
-        selectedDistance = distance[0]; // Defaults to first route distance
+
     }
+
+    }
+
     cout << endl;
     departureTime = setTime(); // Sets departure time
     cout << endl;
@@ -229,7 +272,7 @@ void Ticket::showTicketInfo() {
     float addPremiumFare = 1;
     if (isPremium) addPremiumFare = 1.5; // Applies premium fare multiplier
     fare = (calculateFare() * addPremiumFare); // Calculates total fare
-    fare = roundUp(fare-5); // Rounds up fare 
+    fare = roundUp(fare-5); // Rounds up fare
     cout << "Fare: " << fare << endl; // Displays rounded fare
 
     cout << "\nDo you have any Coupon Code? (1. Yes  --- 2. No): ";
@@ -265,26 +308,37 @@ string BusTicket::setTime() {
     cout << "4. 03:00 PM" << endl;
     cout << "5. 04:00 PM" << endl;
     cout << "6. 07:00 PM" << endl;
-    cout << "Enter your choice: ";
     int timeChoice;
-    cin >> timeChoice; // Gets time choice
+    bool ok=true;
+    while(ok)
+    {
 
-    try {
-        switch (timeChoice) {
-            case 1: return "08:00 AM";
+        cout << "Enter your choice: ";
+        cin >> timeChoice; // Gets time choice
+         try {
+            if(timeChoice<1 || timeChoice>6)
+            {
+                cin.clear();// reset error
+                throw "invalid time ! Enter correct one.";
+            }
+
+            switch (timeChoice) {
+             case 1: return "08:00 AM";
             case 2: return "09:00 AM";
             case 3: return "12:00 PM";
             case 4: return "03:00 PM";
             case 5: return "04:00 PM";
             case 6: return "07:00 PM";
-            default: throw "Invalid time selection."; // Validates time choice
+            }
+
+            break;
         }
-    }
-    catch (const char* e) {
-        cout << "Error: " << e << endl;
-        cout << "Defaulting to 08:00 AM.\n";
-        return "08:00 AM"; // Defaults to 08:00 AM
-    }
+        catch (const char* e) {
+            cout << "Error: " << e << endl;
+
+        }
+
+   }
 }
 
 // TrainTicket class implementation
@@ -295,27 +349,41 @@ int TrainTicket::calculateFare() {
 }
 
 string TrainTicket::setTime() {
-    cout << "Select your departure time : (1-3)" << endl;
-    cout << "1. 08:00 AM" << endl;
-    cout << "2. 12:00 PM" << endl;
-    cout << "3. 04:00 PM" << endl;
-    cout << "Enter your choice: ";
-    int timeChoice;
-    cin >> timeChoice; // Gets time choice
 
-    try {
-        switch (timeChoice) {
-            case 1: return "08:00 AM";
-            case 2: return "12:00 PM";
-            case 3: return "04:00 PM";
-            default: throw "Invalid time selection."; // Validates time choice
+        cout << "Select your departure time : (1-3)" << endl;
+        cout << "1. 08:00 AM" << endl;
+        cout << "2. 12:00 PM" << endl;
+        cout << "3. 04:00 PM" << endl;
+        int timeChoice;
+
+
+    bool ok=true;
+    while(ok)
+    {
+
+        cout << "Enter your choice: ";
+        cin >> timeChoice; // Gets time choice
+         try {
+            if(timeChoice!=1 && timeChoice !=2 && timeChoice !=3)
+            {
+                cin.clear();// reset error
+                throw "invalid time ! Enter correct one.";
+            }
+
+            switch (timeChoice) {
+                case 1: return "08:00 AM";
+                case 2: return "12:00 PM";
+                case 3: return "04:00 PM";
+            }
+
+            break;
         }
-    }
-    catch (const char* e) {
-        cout << "Error: " << e << endl;
-        cout << "Defaulting to 08:00 AM.\n";
-        return "08:00 AM"; // Defaults to 08:00 AM
-    }
+        catch (const char* e) {
+            cout << "Error: " << e << endl;
+
+        }
+
+   }
 }
 
 // FlightTicket class implementation
@@ -329,22 +397,34 @@ string FlightTicket::setTime() {
     cout << "Select your departure time : (1-2)" << endl;
     cout << "1. 10:00 AM" << endl;
     cout << "2. 08:00 PM" << endl;
-    cout << "Enter your choice: ";
     int timeChoice;
-    cin >> timeChoice; // Gets time choice
 
-    try {
+    bool ok=true;
+    while(ok)
+    {
+
+         cout << "Enter your choice: ";
+        cin >> timeChoice; // Gets time choice
+         try {
+            if(timeChoice!=1 && timeChoice !=2)
+            {
+                cin.clear();// reset error
+                throw "invalid time ! Enter correct one.";
+            }
+
         switch (timeChoice) {
             case 1: return "10:00 AM";
             case 2: return "08:00 PM";
-            default: throw "Invalid time selection."; // Validates time choice
         }
-    }
+
+        break;
+     }
     catch (const char* e) {
         cout << "Error: " << e << endl;
-        cout << "Defaulting to 10:00 AM.\n";
-        return "10:00 AM"; // Defaults to 10:00 AM
+
     }
+    }
+
 }
 
 // Generates random ticket ID
@@ -456,7 +536,7 @@ public:
         cout << " Processing Payment of " << amount << " BDT..." << endl;
         cout<< " Transaction id: " << getTransactionID() << endl;
 
-    } 
+    }
     string getTransactionID() const {
         return "TXN" + to_string(rand() % 10000); // Generates a random transaction ID
     }
@@ -532,34 +612,50 @@ public:
 // Handles ticket purchase process
 void buyTicket() {
     Ticket* ticket = nullptr; // Pointer for ticket object
-    cout << "\nWhich type of ticket you want to buy?" << endl;
-    cout << "1. Bus Ticket" << endl;
-    cout << "2. Train Ticket" << endl;
-    cout << "3. Flight Ticket" << endl;
-    cout << "Enter your choice: ";
+         cout << "\nWhich type of ticket you want to buy?" << endl;
+        cout << "1. Bus Ticket" << endl;
+        cout << "2. Train Ticket" << endl;
+        cout << "3. Flight Ticket" << endl;
     int ticketChoice;
-    cin >> ticketChoice; // Gets ticket type choice
+    while(true)
+    {
 
-    switch (ticketChoice) {
-        case 1:
-            cout << "You have selected Bus Ticket.\n" << endl;
-            ticket = new BusTicket(isPremium(ticketChoice)); // Creates bus ticket
-            ticket->selectRoute(); // Selects route
-            break;
-        case 2:
-            cout << "You have selected Train Ticket.\n" << endl;
-            ticket = new TrainTicket(isPremium(ticketChoice)); // Creates train ticket
-            ticket->selectRoute(); // Selects route
-            break;
-        case 3:
-            cout << "You have selected Flight Ticket.\n" << endl;
-            ticket = new FlightTicket(isPremium(ticketChoice)); // Creates flight ticket
-            ticket->selectRoute(); // Selects route
-            break;
-        default:
-            cout << "Invalid choice." << endl;
-            return; // Handles invalid choice
+        cout << "Enter your choice: ";
+        cin >> ticketChoice; // Gets ticket type choice
+        try{
+            if(ticketChoice<1 || ticketChoice>3)
+            {
+                cin.clear();
+                throw "Invalid choice! enter correct one.";
+            }
+            switch (ticketChoice) {
+            case 1:
+                cout << "You have selected Bus Ticket.\n" << endl;
+                ticket = new BusTicket(isPremium(ticketChoice)); // Creates bus ticket
+                ticket->selectRoute(); // Selects route
+                break;
+            case 2:
+                cout << "You have selected Train Ticket.\n" << endl;
+                ticket = new TrainTicket(isPremium(ticketChoice)); // Creates train ticket
+                ticket->selectRoute(); // Selects route
+                break;
+            case 3:
+                cout << "You have selected Flight Ticket.\n" << endl;
+                ticket = new FlightTicket(isPremium(ticketChoice)); // Creates flight ticket
+                ticket->selectRoute(); // Selects route
+                break;
+
+                }
+                break;
+        }
+        catch(const char* e)
+        {
+            cout<<"error"<<e<<endl;
+        }
+
+
     }
+
 
     Passenger passenger; // Creates passenger object
     passenger.setInfo(); // Sets passenger info
