@@ -1,22 +1,23 @@
-
 ## **Lab Name : Object Oriented Programming Sessional**
+
 ## **Submission Date : August 26, 2025**
+
 ### **Group Members :**
-| Name             | Roll        |
-|------------------|-------------|
-| MD. NAHID REZA   | 2310037     |
-| MD. SHUVRA HASAN | 2310040     |
-| MD. ARIFUL ISLAM | 2310044     |
+
+| Name             | Roll    |
+| ---------------- | ------- |
+| MD. NAHID REZA   | 2310037 |
+| MD. SHUVRA HASAN | 2310040 |
+| MD. ARIFUL ISLAM | 2310044 |
 
 ---
 
 <h2>1. Project Title</h2>
 <p><strong>E-Ticket Booking System</strong></p>
+<p><strong>Web Version : </strong><a href="https://nahidreza45.github.io/TBS/">E-Ticket Booking System</a> </p>
 
 <h2>2. Project Summary</h2>
 <p>A C++-based console application for booking bus, train, and flight tickets, featuring route selection, premium options, fare calculation with discounts, passenger information management, multiple payment methods (Bkash, Nagad, Bank), and file-based storage for ticket details.</p>
-
-
 
 ### **Code:**
 
@@ -835,77 +836,5 @@ int main() {
     <li><strong>Purpose</strong>: Ensures consistent fare rounding.</li>
 </ul>
 
-<h2>5. Summary Table</h2>
-<table>
-    <tr>
-        <th>Topic</th>
-        <th>Key Locations (Lines)</th>
-        <th>Key Classes/Functions</th>
-    </tr>
-    <tr>
-        <td>Encapsulation</td>
-        <td>59–79, 81–110, 128–177, 193–263</td>
-        <td><code>Passenger</code>, <code>Ticket</code></td>
-    </tr>
-    <tr>
-        <td>Inheritance</td>
-        <td>81–110, 112–131, 512–548</td>
-        <td><code>Ticket</code>, <code>BusTicket</code>, <code>TrainTicket</code>, <code>FlightTicket</code></td>
-    </tr>
-    <tr>
-        <td colspan="3"><strong>Summary of OOP Implementation</strong></td>
-    </tr>
-    <tr>
-        <td>Polymorphism (Compile-Time)</td>
-        <td>195–202, 204</td>
-        <td><code>applyDiscount</code></td>
-    </tr>
-    <tr>
-        <td>Polymorphism (Run-Time)</td>
-        <td>104–105, 267, 302, 349, 269–294, 304–326, 351–372, 512–548</td>
-        <td><code>calculateFare</code>, <code>setTime</code></td>
-    </tr>
-    <tr>
-        <td>Abstraction</td>
-        <td>81–110, 104–105, 267, 302, 349, 269–294, 304–326, 351–372</td>
-        <td><code>Ticket</code></td>
-    </tr>
-    <tr>
-        <td>Diamond Problem</td>
-        <td>407–458, 418, 425, 432, 454</td>
-        <td><code>Payment</code>, <code>Bkash</code>, <code>Nagad</code>, <code>Bank</code>, <code>PassengerPayment</code></td>
-    </tr>
-    <tr>
-        <td>Error Handling</td>
-        <td>128–177, 211–242, 269–294, 304–326, 351–372, 512–548</td>
-        <td><code>setInfo</code>, <code>selectRoute</code>, <code>setTime</code>, <code>buyTicket</code></td>
-    </tr>
-    <tr>
-        <td>File Handling</td>
-        <td>372–426</td>
-        <td><code>storeTicketInformation</code>, <code>displayBuyerDetailsByTicketID</code></td>
-    </tr>
-    <tr>
-        <td>Constructor & Destructor</td>
-        <td>128, 193, 265, 300, 347, 410, 419, 426, 433, 441, 415</td>
-        <td><code>Passenger</code>, <code>Ticket</code>, <code>Payment</code>, derived classes</td>
-    </tr>
-    <tr>
-        <td>Static Members</td>
-        <td>84, 189, 255, 263</td>
-        <td><code>Ticket::totalTicketsSold</code></td>
-    </tr>
-    <tr>
-        <td>Friend Function/Class</td>
-        <td>74, 108, 372–388</td>
-        <td><code>FileSystem</code></td>
-    </tr>
-    <tr>
-        <td>Generic Class/Function</td>
-        <td>52–56, 122–125, 250, 257</td>
-        <td><code>roundUp</code></td>
-    </tr>
-</table>
-
-<h2>6. Conclusion</h2>
+<h2>5. Conclusion</h2>
 <p>The <strong>Ticket Reservation System</strong> effectively implements all specified OOP concepts, including encapsulation, inheritance, polymorphism, abstraction, and virtual inheritance to resolve the diamond problem. It ensures robustness with enhanced error handling using while loops, persists data via file handling, and enhances functionality with static members and generic functions. The modular, reusable design makes it a strong example of OOP principles in action.</p>
